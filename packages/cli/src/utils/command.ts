@@ -89,6 +89,14 @@ function parseArray<T>(parseElement: ParseFn<T>): ParseFn<T[]> {
   }
 }
 
+const parseHexString: ParseFn<string> = (input) => {
+  if (Web3.utils.isHex(input)) {
+    return input
+  } else {
+    throw new CLIError(`${input} is not a hex string`)
+  }
+}
+
 export const parseAddressArray = parseArray(parseAddress)
 export const parseIntRange = (input: string) => {
   const range = input
@@ -180,6 +188,11 @@ export const Flags = {
     parse: parseWei,
     description: 'Token value without decimals',
     helpValue: '10000000000000000000000',
+  }),
+  hexString: flags.build({
+    parse: parseHexString,
+    description: 'Hex string',
+    helpValue: '0x12345678',
   }),
 }
 
